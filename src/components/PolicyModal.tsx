@@ -4,6 +4,7 @@ import * as Dialog from "@radix-ui/react-dialog";
 
 import { FirstStep, FirstStepFormValues } from "./FirstStep";
 import { SecondStep, SecondStepFormValues } from "./SecondStep";
+import { LastStep } from "./LastStep";
 
 interface PolicyModalProps {
   isOpen: boolean;
@@ -32,30 +33,60 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
 
   const handleSubmitSecondStep = (data: SecondStepFormValues) => {
     console.log({ ...firstStepFormData, ...data });
+
+    setStep(2);
+  };
+
+  const getStepContent = (step: number) => {
+    if (step === 0) {
+      return (
+        <FirstStep
+          form={firstStepForm}
+          onClose={() => handleOpenChange(false)}
+          onSubmit={handleSubmitFirstStep}
+        />
+      );
+    }
+
+    if (step === 1) {
+      return (
+        <SecondStep
+          form={secondStepForm}
+          onClose={() => handleOpenChange(false)}
+          onSubmit={handleSubmitSecondStep}
+        />
+      );
+    }
+
+    return <LastStep />;
+  };
+
+  const getStepNumber = () => {
+    if (step === 2) return 2;
+
+    return step + 1;
+  };
+
+  const handleOpenChange = (open: boolean) => {
+    if (open === false) {
+      firstStepForm.reset();
+      secondStepForm.reset();
+      setStep(0);
+    }
+
+    setIsOpen(open);
   };
 
   return (
-    <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
+    <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black bg-opacity-80 backdrop-blur-sm data-[state=open]:animate-overlayShow fixed inset-0" />
         <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[700px] translate-x-[-50%] translate-y-[-50%] rounded-2xl bg-white shadow-[-40px_40px_80px_-8px_rgba(145,158,171,0.24)] focus:outline-none">
           <Dialog.Title className="text-text-primary p-6 text-lg font-bold mb-6">
-            Создать полис {step + 1}/2
+            Создать полис {getStepNumber()}/2
           </Dialog.Title>
 
-          {step === 0 ? (
-            <FirstStep
-              form={firstStepForm}
-              onClose={() => setIsOpen(false)}
-              onSubmit={handleSubmitFirstStep}
-            />
-          ) : (
-            <SecondStep
-              form={secondStepForm}
-              onClose={() => setIsOpen(false)}
-              onSubmit={handleSubmitSecondStep}
-            />
-          )}
+          {getStepContent(step)}
         </Dialog.Content>
       </Dialog.Portal>
     </Dialog.Root>

@@ -7,3 +7,30 @@
     @apply mx-auto px-4 max-w-[1340px] w-full;
   }
 }
+
+@layer base {
+  #progress {
+    animation: success 0.5s linear forwards;
+  }
+
+  #progress-icon {
+    transform-origin: center center;
+    animation-delay: 10s;
+    animation: success-icon 0.5s ease-in-out forwards;
+  }
+
+  @keyframes success {
+    to {
+      stroke-dashoffset: 830;
+    }
+  }
+
+  @keyframes success-icon {
+    from {
+      scale: 0;
+    }
+    to {
+      scale: 1;
+    }
+  }
+}

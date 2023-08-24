@@ -2,8 +2,9 @@ import React, { useCallback } from "react";
 import { useDropzone } from "react-dropzone";
 import { twMerge } from "tailwind-merge";
 
+import { Success } from "./Success";
+
 import { ReactComponent as DirectInbox } from "assets/icons/direct-inbox.svg";
-import { ReactComponent as Yes } from "assets/icons/yes.svg";
 
 interface ImageInputProps {
   onChange: (file: File) => void;
@@ -35,10 +36,7 @@ export const ImageInput: React.FC<ImageInputProps> = ({ onChange }) => {
         )}
       >
         {acceptedFiles.length ? (
-          <div className="grid place-items-center">
-            <Yes />
-            <p className="text-lg font-bold">Готово</p>
-          </div>
+          <Success />
         ) : (
           <>
             <DirectInbox width={67} height={67} className="mb-[6px]" />
