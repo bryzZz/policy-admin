@@ -6,7 +6,7 @@ import Avatar from "assets/images/Avatar.png";
 export const Header: React.FC = () => {
   return (
     <header className="base-container flex justify-between items-center mb-12">
-      <div className="py-4 px-5 flex gap-4">
+      <div className="py-4 px-5 flex gap-4 bg-[#919EAB] bg-opacity-[0.08] rounded-xl">
         <img
           className="rounded-full object-cover w-10 aspect-square"
           src={Avatar}

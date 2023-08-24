@@ -1,0 +1,67 @@
+.Currency-input {
+  position: relative;
+  width: 100%;
+
+  color: #919eab;
+}
+
+.Currency-input input::placeholder {
+  opacity: 0;
+}
+
+.Currency-input label {
+  display: block;
+
+  width: 100%;
+  padding: 1rem 14px;
+  border-radius: 8px;
+
+  border: 1px solid rgba(145, 158, 171, 0.32);
+
+  cursor: text;
+}
+
+.Currency-input input {
+  display: block;
+
+  color: #919eab;
+  font-size: 1rem;
+
+  outline: none;
+  border: none;
+
+  max-width: 100%;
+}
+
+.Currency-input .label {
+  position: absolute;
+  left: 16px;
+  /* top: 50%; */
+  top: 0;
+  transform: translateY(-50%);
+
+  color: #919eab;
+  /* font-size: 1rem; */
+  font-size: 12px;
+
+  transition: 0.3s;
+  background-color: white;
+
+  padding: 2px;
+
+  cursor: text;
+}
+
+/* .Currency-input input:focus .Currency-input .label,
+.Currency-input input:not(:placeholder-shown) .Currency-input .label {
+  top: 0;
+  font-size: 12px;
+} */
+
+.Currency-input.error input {
+  border-color: #e10000;
+}
+
+.Currency-input.error .label {
+  color: #e10000;
+}

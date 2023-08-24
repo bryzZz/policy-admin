@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { ReactComponent as DocumentCopy } from "assets/icons/document-copy.svg";
 import { ReactComponent as DocumentDownload } from "assets/icons/document-download.svg";
@@ -7,6 +7,7 @@ import { ReactComponent as Yes } from "assets/icons/yes.svg";
 import { ReactComponent as No } from "assets/icons/no.svg";
 import { ReactComponent as Document } from "assets/icons/Document.svg";
 import { twMerge } from "tailwind-merge";
+import { RecordModal } from "./RecordModal";
 
 const mockData = [
   {
@@ -60,10 +61,15 @@ const RUBFormat = new Intl.NumberFormat("en-US", {
 });
 
 export const Table: React.FC = () => {
+  const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+
   return (
     <div className="base-container">
       <div className="flex items-center gap-4 mb-8">
-        <button className="flex items-center gap-2 py-3 px-[18px] bg-[#00AB55] rounded-lg shadow-[0px_8px_16px_0px_rgba(0,171,85,0.24)] text-[15px] leading-6 font-bold text-white">
+        <button
+          className="flex items-center gap-2 py-3 px-[18px] bg-[#00AB55] rounded-lg shadow-[0px_8px_16px_0px_rgba(0,171,85,0.24)] text-[15px] leading-6 font-bold text-white"
+          onClick={() => setIsRecordModalOpen(true)}
+        >
           Добавить запись
           <DocumentCopy />
         </button>
@@ -169,6 +175,11 @@ export const Table: React.FC = () => {
           </tbody>
         </table>
       </div>
+
+      <RecordModal
+        isOpen={isRecordModalOpen}
+        setIsOpen={setIsRecordModalOpen}
+      />
     </div>
   );
 };

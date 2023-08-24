@@ -1,0 +1,53 @@
+.form-input {
+  position: relative;
+  width: 100%;
+}
+
+.form-input input::placeholder {
+  opacity: 0;
+}
+
+.form-input input {
+  width: 100%;
+
+  color: #919eab;
+  font-size: 1rem;
+
+  padding: 1rem 14px;
+  outline: none;
+  border: none;
+  border-radius: 8px;
+
+  border: 1px solid rgba(145, 158, 171, 0.32);
+}
+
+.form-input label {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  color: #919eab;
+  font-size: 1rem;
+
+  transition: 0.3s;
+  background-color: white;
+
+  padding: 2px;
+
+  cursor: text;
+}
+
+.form-input input:focus + label,
+.form-input input:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 12px;
+}
+
+.form-input.error input {
+  border-color: #e10000;
+}
+
+.form-input.error label {
+  color: #e10000;
+}
