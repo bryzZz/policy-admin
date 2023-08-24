@@ -55,7 +55,6 @@ const mockData = [
 ];
 
 const RUBFormat = new Intl.NumberFormat("en-US", {
-  currencyDisplay: "",
   minimumIntegerDigits: 2,
   minimumFractionDigits: 2,
 });
