@@ -1,4 +1,8 @@
 import React, { useState } from "react";
+import { twMerge } from "tailwind-merge";
+
+import { RecordModal } from "./RecordModal";
+import { ScanModal } from "./ScanModal";
 
 import { ReactComponent as DocumentCopy } from "assets/icons/document-copy.svg";
 import { ReactComponent as DocumentDownload } from "assets/icons/document-download.svg";
@@ -6,8 +10,6 @@ import { ReactComponent as Search } from "assets/icons/search.svg";
 import { ReactComponent as Yes } from "assets/icons/yes.svg";
 import { ReactComponent as No } from "assets/icons/no.svg";
 import { ReactComponent as Document } from "assets/icons/Document.svg";
-import { twMerge } from "tailwind-merge";
-import { RecordModal } from "./RecordModal";
 
 const mockData = [
   {
@@ -20,7 +22,7 @@ const mockData = [
     discrepancies: 900,
   },
   {
-    id: "7984",
+    id: "7985",
     number: "ЕРН 8423239879",
     hasScan: false,
     hasSeal: false,
@@ -28,7 +30,7 @@ const mockData = [
     discrepancies: 900,
   },
   {
-    id: "7984",
+    id: "7986",
     number: "ЕРН 8423239879",
     correct: false,
     hasScan: true,
@@ -37,7 +39,7 @@ const mockData = [
     discrepancies: 0,
   },
   {
-    id: "7984",
+    id: "7987",
     number: "ЕРН 8423239879",
     hasScan: false,
     hasSeal: false,
@@ -45,7 +47,7 @@ const mockData = [
     discrepancies: 900,
   },
   {
-    id: "7984",
+    id: "7988",
     number: "ЕРН 8423239879",
     correct: true,
     hasScan: true,
@@ -62,6 +64,7 @@ const RUBFormat = new Intl.NumberFormat("en-US", {
 
 export const Table: React.FC = () => {
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
+  const [isScanModalOpen, setIsScanModalOpen] = useState(false);
 
   return (
     <div className="base-container">
@@ -73,7 +76,10 @@ export const Table: React.FC = () => {
           Добавить запись
           <DocumentCopy />
         </button>
-        <button className="flex items-center gap-2 py-3 px-[18px] bg-[#C6C6C6] rounded-lg shadow-[0px_8px_16px_0px_rgba(183,183,183,0.32)] text-[15px] leading-6 font-bold text-white">
+        <button
+          className="flex items-center gap-2 py-3 px-[18px] bg-[#C6C6C6] rounded-lg shadow-[0px_8px_16px_0px_rgba(183,183,183,0.32)] text-[15px] leading-6 font-bold text-white"
+          onClick={() => setIsScanModalOpen(true)}
+        >
           Загрузить скан
           <DocumentDownload />
         </button>
@@ -180,6 +186,7 @@ export const Table: React.FC = () => {
         isOpen={isRecordModalOpen}
         setIsOpen={setIsRecordModalOpen}
       />
+      <ScanModal isOpen={isScanModalOpen} setIsOpen={setIsScanModalOpen} />
     </div>
   );
 };
