@@ -81,7 +81,10 @@ export const Table: React.FC = () => {
           <tbody>
             {data &&
               Object.entries(data).map(
-                ([id, { linkedTo, data, scan, print, prize, minus }]) => (
+                ([
+                  id,
+                  { linkedTo, data, scan, print, prize, minus, scan_url },
+                ]) => (
                   <tr key={id}>
                     <td className="p-5 text-text-secondary font-semibold text-[17px]">
                       #{id}
@@ -125,9 +128,9 @@ export const Table: React.FC = () => {
                       {minus} ₽
                     </td>
                     <td>
-                      <button>
+                      <a href={scan_url} target="_blank">
                         <Document />
-                      </button>
+                      </a>
                     </td>
                   </tr>
                 )
