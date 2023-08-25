@@ -18,6 +18,8 @@ export const CurrencyInput: React.FC<CurrencyInputProps> = ({
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (isNaN(Number(e.target.value))) return;
+    if (e.target.value.includes(".") && e.target.value.split(".")[1].length > 2)
+      return;
 
     if (e.target.value[0] === "0") return onChange(e.target.value.slice(1));
 
