@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { twMerge } from "tailwind-merge";
+import useSWR from "swr";
+import axios from "axios";
 
 import { RecordModal } from "./RecordModal";
 import { ScanModal } from "./ScanModal";
@@ -10,59 +12,18 @@ import { ReactComponent as Search } from "assets/icons/search.svg";
 import { ReactComponent as Yes } from "assets/icons/yes.svg";
 import { ReactComponent as No } from "assets/icons/no.svg";
 import { ReactComponent as Document } from "assets/icons/Document.svg";
+import { GetPolicyResponse } from "types";
 
-const mockData = [
-  {
-    id: "7984",
-    number: "ЕРН 8423239879",
-    correct: true,
-    hasScan: true,
-    hasSeal: true,
-    premium: "4900.40",
-    discrepancies: 900,
-  },
-  {
-    id: "7985",
-    number: "ЕРН 8423239879",
-    hasScan: false,
-    hasSeal: false,
-    premium: "4900.40",
-    discrepancies: 900,
-  },
-  {
-    id: "7986",
-    number: "ЕРН 8423239879",
-    correct: false,
-    hasScan: true,
-    hasSeal: true,
-    premium: "00.00",
-    discrepancies: 0,
-  },
-  {
-    id: "7987",
-    number: "ЕРН 8423239879",
-    hasScan: false,
-    hasSeal: false,
-    premium: "4900.40",
-    discrepancies: 900,
-  },
-  {
-    id: "7988",
-    number: "ЕРН 8423239879",
-    correct: true,
-    hasScan: true,
-    hasSeal: true,
-    premium: "00.00",
-    discrepancies: 0,
-  },
-];
-
-const RUBFormat = new Intl.NumberFormat("en-US", {
-  minimumIntegerDigits: 2,
-  minimumFractionDigits: 2,
-});
+// const RUBFormat = new Intl.NumberFormat("en-US", {
+//   minimumIntegerDigits: 2,
+//   minimumFractionDigits: 2,
+// });
 
 export const Table: React.FC = () => {
+  const { data } = useSWR("https://mksbai.site/api/method/getAllRows", (url) =>
+    axios.post<GetPolicyResponse>(url).then((res) => res.data)
+  );
+
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [isScanModalOpen, setIsScanModalOpen] = useState(false);
 
@@ -118,66 +79,59 @@ export const Table: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {mockData.map(
-              ({
-                id,
-                number,
-                correct,
-                hasScan,
-                hasSeal,
-                premium,
-                discrepancies,
-              }) => (
-                <tr key={id}>
-                  <td className="p-5 text-text-secondary font-semibold text-[17px]">
-                    #{id}
-                  </td>
-                  <td className="p-5 text-text-primary text-[17px] flex items-center gap-[2px]">
-                    {number}
-                    {correct === true && <Yes />}
-                    {correct === false && <No />}
-                  </td>
-                  <td className="p-5">
-                    {hasScan ? (
-                      <p className="w-[54px] h-[27px] rounded-[7px] bg-[#54D62C] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#229A16]">
-                        Есть
-                      </p>
-                    ) : (
-                      <p className="w-[54px] h-[27px] rounded-[7px] bg-[#FF4842] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#B72136]">
-                        Нет
-                      </p>
-                    )}
-                  </td>
-                  <td className="p-5">
-                    {hasSeal ? (
-                      <p className="w-[54px] h-[27px] rounded-[7px] bg-[#54D62C] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#229A16]">
-                        Есть
-                      </p>
-                    ) : (
-                      <p className="w-[54px] h-[27px] rounded-[7px] bg-[#FF4842] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#B72136]">
-                        Нет
-                      </p>
-                    )}
-                  </td>
-                  <td className="p-5 text-text-primary text-[17px]">
-                    {premium} ₽
-                  </td>
-                  <td
-                    className={twMerge(
-                      "p-5 text-text-primary text-[17px]",
-                      discrepancies > 0 && "text-[#B72136]"
-                    )}
-                  >
-                    {RUBFormat.format(discrepancies)} ₽
-                  </td>
-                  <td>
-                    <button>
-                      <Document />
-                    </button>
-                  </td>
-                </tr>
-              )
-            )}
+            {data &&
+              Object.entries(data).map(
+                ([id, { linkedTo, data, scan, print, prize, minus }]) => (
+                  <tr key={id}>
+                    <td className="p-5 text-text-secondary font-semibold text-[17px]">
+                      #{id}
+                    </td>
+                    <td className="p-5 text-text-primary text-[17px] flex items-center gap-[2px]">
+                      {linkedTo}
+                      {data === "success" && <Yes />}
+                      {data === "error" && <No />}
+                    </td>
+                    <td className="p-5">
+                      {scan ? (
+                        <p className="w-[54px] h-[27px] rounded-[7px] bg-[#54D62C] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#229A16]">
+                          Есть
+                        </p>
+                      ) : (
+                        <p className="w-[54px] h-[27px] rounded-[7px] bg-[#FF4842] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#B72136]">
+                          Нет
+                        </p>
+                      )}
+                    </td>
+                    <td className="p-5">
+                      {print ? (
+                        <p className="w-[54px] h-[27px] rounded-[7px] bg-[#54D62C] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#229A16]">
+                          Есть
+                        </p>
+                      ) : (
+                        <p className="w-[54px] h-[27px] rounded-[7px] bg-[#FF4842] bg-opacity-[0.16] font-bold text-[15px] flex items-center justify-center text-[#B72136]">
+                          Нет
+                        </p>
+                      )}
+                    </td>
+                    <td className="p-5 text-text-primary text-[17px]">
+                      {prize} ₽
+                    </td>
+                    <td
+                      className={twMerge(
+                        "p-5 text-text-primary text-[17px]",
+                        Number(minus) > 0 && "text-[#B72136]"
+                      )}
+                    >
+                      {minus} ₽
+                    </td>
+                    <td>
+                      <button>
+                        <Document />
+                      </button>
+                    </td>
+                  </tr>
+                )
+              )}
           </tbody>
         </table>
       </div>

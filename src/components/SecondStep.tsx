@@ -1,5 +1,5 @@
 import React from "react";
-import { UseFormReturn } from "react-hook-form";
+import { UseFormReturn, Controller } from "react-hook-form";
 
 import { Input } from "./Input";
 import { Checkbox } from "./Checkbox";
@@ -11,15 +11,15 @@ interface SecondStepProps {
 }
 
 export interface SecondStepFormValues {
-  carModel: string;
-  carNumber: string;
-  documentView: string;
-  documentSeries: string;
-  number: string;
-  driverLicense: string;
-  insuranceStartDate: Date;
-  insuranceEndDate: Date;
-  seal: boolean;
+  vehicle_model: string;
+  vehicle_number: string;
+  doc_type: string;
+  doc_serial: string;
+  doc_number: string;
+  doc_data: string;
+  start: Date;
+  finish: Date;
+  print: boolean;
 }
 
 export const SecondStep: React.FC<SecondStepProps> = ({
@@ -27,50 +27,85 @@ export const SecondStep: React.FC<SecondStepProps> = ({
   onSubmit,
   onClose,
 }) => {
-  const { register, handleSubmit } = form;
+  const { register, handleSubmit, control } = form;
+
+  const handleNumberChange =
+    (onChange: (value: string) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (isNaN(Number(e.target.value))) return;
+      if (
+        e.target.value.includes(".") &&
+        e.target.value.split(".")[1].length > 2
+      )
+        return;
+
+      onChange(e.target.value);
+    };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-6 flex-col mb-6 px-6">
         <div className="grid grid-cols-2 gap-4">
           <Input
-            {...register("carModel", { required: true })}
+            {...register("vehicle_model", { required: true })}
             label="Модель авто"
           />
           <Input
-            {...register("carNumber", { required: true })}
+            {...register("vehicle_number", { required: true })}
             label="Гос. номер авто"
           />
         </div>
         <div className="grid grid-cols-3 gap-4">
           <Input
-            {...register("documentView", { required: true })}
+            {...register("doc_type", { required: true })}
             label="Вид документа"
           />
-          <Input
-            {...register("documentSeries", { required: true })}
-            type="text"
-            label="Серия документа"
+          <Controller
+            control={control}
+            name="doc_serial"
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={handleNumberChange(field.onChange)}
+                  label="Серия документа"
+                />
+              );
+            }}
           />
-          <Input {...register("number", { required: true })} label="Номер" />
+          <Controller
+            control={control}
+            name="doc_number"
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={handleNumberChange(field.onChange)}
+                  label="Номер"
+                />
+              );
+            }}
+          />
         </div>
         <Input
-          {...register("driverLicense", { required: true })}
+          {...register("doc_data", { required: true })}
           label="Водительское удостоверение "
         />
         <div className="grid grid-cols-2 gap-4">
           <Input
-            {...register("insuranceStartDate", { required: true })}
+            {...register("start", { required: true })}
             type="date"
             label="Дата начала страхования"
           />
           <Input
-            {...register("insuranceEndDate", { required: true })}
+            {...register("finish", { required: true })}
             type="date"
             label="Дата окончания страхования"
           />
         </div>
-        <Checkbox {...register("seal")} label="Поставить печать" />
+        <Checkbox {...register("print")} label="Поставить печать" />
       </div>
 
       <div className="flex p-6 items-center justify-end gap-3 border-t border-[rgba(145,_158,_171,_0.24)]">

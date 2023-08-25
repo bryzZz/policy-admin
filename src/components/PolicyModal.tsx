@@ -1,27 +1,45 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as Dialog from "@radix-ui/react-dialog";
+import useSWRMutation from "swr/mutation";
+import axios from "axios";
 
 import { FirstStep, FirstStepFormValues } from "./FirstStep";
 import { SecondStep, SecondStepFormValues } from "./SecondStep";
 import { LastStep } from "./LastStep";
+import { CreatePolicyResponse } from "types";
 
 interface PolicyModalProps {
   isOpen: boolean;
   setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type RequestData = FirstStepFormValues &
+  Omit<SecondStepFormValues, "print"> & { print: number };
+
 export const PolicyModal: React.FC<PolicyModalProps> = ({
   isOpen,
   setIsOpen,
 }) => {
+  const { trigger, data } = useSWRMutation(
+    "/api/method/policy/createFull",
+    (
+      url,
+      {
+        arg: data,
+      }: {
+        arg: RequestData;
+      }
+    ) => axios.post<CreatePolicyResponse>(url, data).then((res) => res.data)
+  );
+
   const [step, setStep] = useState(0);
   const [firstStepFormData, setFirstStepFormData] =
     useState<FirstStepFormValues | null>(null);
 
   const firstStepForm = useForm<FirstStepFormValues>({
     defaultValues: {
-      premium: "0",
+      prize: "0",
     },
   });
   const secondStepForm = useForm<SecondStepFormValues>();
@@ -31,8 +49,12 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
     setStep(1);
   };
 
-  const handleSubmitSecondStep = (data: SecondStepFormValues) => {
-    console.log({ ...firstStepFormData, ...data });
+  const handleSubmitSecondStep = async (data: SecondStepFormValues) => {
+    await trigger({
+      ...firstStepFormData,
+      ...data,
+      print: Number(data.print),
+    } as RequestData);
 
     setStep(2);
   };
@@ -58,7 +80,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
       );
     }
 
-    return <LastStep />;
+    return <LastStep imageSrc={data?.returnedUrl ?? ""} />;
   };
 
   const getStepNumber = () => {

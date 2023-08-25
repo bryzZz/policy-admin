@@ -11,13 +11,13 @@ interface FirstStepProps {
 }
 
 export interface FirstStepFormValues {
-  policyNumber: string;
-  premium: string;
-  fullName: string;
-  address: string;
-  apartmentNumber: string;
-  index: string;
-  identificationNumber: string;
+  pNumber: string;
+  prize: string;
+  fcs: string;
+  cAddress: string;
+  cFlat: string;
+  cIndex: string;
+  vehicle_id: string;
 }
 
 export const FirstStep: React.FC<FirstStepProps> = ({
@@ -27,17 +27,30 @@ export const FirstStep: React.FC<FirstStepProps> = ({
 }) => {
   const { register, control, handleSubmit } = form;
 
+  const handleNumberChange =
+    (onChange: (value: string) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (isNaN(Number(e.target.value))) return;
+      if (
+        e.target.value.includes(".") &&
+        e.target.value.split(".")[1].length > 2
+      )
+        return;
+
+      onChange(e.target.value);
+    };
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-6 flex-col mb-6 px-6">
         <div className="grid grid-cols-2 gap-4">
           <Input
-            {...register("policyNumber", { required: true })}
+            {...register("pNumber", { required: true })}
             label="Номер полиса"
           />
           <Controller
             control={control}
-            name="premium"
+            name="prize"
             rules={{ required: true }}
             render={({ field }) => (
               <CurrencyInput
@@ -49,19 +62,42 @@ export const FirstStep: React.FC<FirstStepProps> = ({
           />
         </div>
 
-        <Input {...register("fullName", { required: true })} label="ФИО" />
+        <Input {...register("fcs", { required: true })} label="ФИО" />
 
         <div className="grid grid-cols-3 gap-4">
-          <Input {...register("address", { required: true })} label="Адрес" />
-          <Input
-            {...register("apartmentNumber", { required: true })}
-            label="КВ"
+          <Input {...register("cAddress", { required: true })} label="Адрес" />
+          <Controller
+            control={control}
+            name="cFlat"
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={handleNumberChange(field.onChange)}
+                  label="КВ"
+                />
+              );
+            }}
           />
-          <Input {...register("index", { required: true })} label="Индекс" />
+          <Controller
+            control={control}
+            name="cIndex"
+            rules={{ required: true }}
+            render={({ field }) => {
+              return (
+                <Input
+                  value={field.value}
+                  onChange={handleNumberChange(field.onChange)}
+                  label="Индекс"
+                />
+              );
+            }}
+          />
         </div>
 
         <Input
-          {...register("identificationNumber", { required: true })}
+          {...register("vehicle_id", { required: true })}
           label="Идентифиционный номер транспортного средства"
         />
       </div>
