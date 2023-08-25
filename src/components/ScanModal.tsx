@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Dialog from "@radix-ui/react-dialog";
+import useSWRMutation from "swr/mutation";
+import { useSWRConfig } from "swr";
 
 import { ImageInput } from "./ImageInput";
 
@@ -16,8 +18,32 @@ interface ScanModalFormValues {
 export const ScanModal: React.FC<ScanModalProps> = ({ isOpen, setIsOpen }) => {
   const { handleSubmit, control } = useForm<ScanModalFormValues>();
 
+  const { mutate } = useSWRConfig();
+  const { trigger } = useSWRMutation(
+    "/api/method/addScan",
+    (
+      url,
+      {
+        arg: data,
+      }: {
+        arg: FormData;
+      }
+    ) =>
+      fetch(url, {
+        method: "POST",
+        body: data,
+      })
+  );
+
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("file", data.image);
+
+    trigger(formData).then(() => {
+      setIsOpen(false);
+
+      mutate("/api/method/getAllRows");
+    });
   });
 
   return (

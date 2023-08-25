@@ -1,6 +1,8 @@
 import React from "react";
 import { useForm, Controller } from "react-hook-form";
 import * as Dialog from "@radix-ui/react-dialog";
+import useSWRMutation from "swr/mutation";
+import { useSWRConfig } from "swr";
 
 import { Input } from "./Input";
 import { CurrencyInput } from "./CurrencyInput";
@@ -12,9 +14,9 @@ interface RecordModalProps {
 }
 
 interface RecordModalFormValues {
-  policyNumber: string;
-  premium: string;
-  image: File;
+  linkedTo: string;
+  prize: string;
+  file: File;
 }
 
 export const RecordModal: React.FC<RecordModalProps> = ({
@@ -23,12 +25,38 @@ export const RecordModal: React.FC<RecordModalProps> = ({
 }) => {
   const { register, handleSubmit, control } = useForm<RecordModalFormValues>({
     defaultValues: {
-      premium: "0",
+      prize: "0",
     },
   });
 
+  const { mutate } = useSWRConfig();
+  const { trigger } = useSWRMutation(
+    "/api/method/addRow",
+    (
+      url,
+      {
+        arg: data,
+      }: {
+        arg: FormData;
+      }
+    ) =>
+      fetch(url, {
+        method: "POST",
+        body: data,
+      })
+  );
+
   const onSubmit = handleSubmit((data) => {
-    console.log(data);
+    const formData = new FormData();
+    formData.append("linkedTo", data.linkedTo);
+    formData.append("prize", data.prize);
+    formData.append("file", data.file);
+
+    trigger(formData).then(() => {
+      setIsOpen(false);
+
+      mutate("/api/method/getAllRows");
+    });
   });
 
   return (
@@ -43,12 +71,12 @@ export const RecordModal: React.FC<RecordModalProps> = ({
           <form onSubmit={onSubmit}>
             <div className="flex gap-6 flex-col mb-6 px-6">
               <Input
-                {...register("policyNumber", { required: true })}
+                {...register("linkedTo", { required: true })}
                 label="Номер полиса"
               />
               <Controller
                 control={control}
-                name="premium"
+                name="prize"
                 rules={{ required: true }}
                 render={({ field }) => (
                   <CurrencyInput
@@ -60,8 +88,7 @@ export const RecordModal: React.FC<RecordModalProps> = ({
               />
               <Controller
                 control={control}
-                name="image"
-                rules={{ required: true }}
+                name="file"
                 render={({ field }) => <ImageInput onChange={field.onChange} />}
               />
             </div>

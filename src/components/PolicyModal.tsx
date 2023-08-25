@@ -40,9 +40,16 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
   const firstStepForm = useForm<FirstStepFormValues>({
     defaultValues: {
       prize: "0",
+      cFlat: "",
+      cIndex: "",
     },
   });
-  const secondStepForm = useForm<SecondStepFormValues>();
+  const secondStepForm = useForm<SecondStepFormValues>({
+    defaultValues: {
+      doc_serial: "",
+      doc_number: "",
+    },
+  });
 
   const handleSubmitFirstStep = (data: FirstStepFormValues) => {
     setFirstStepFormData(data);

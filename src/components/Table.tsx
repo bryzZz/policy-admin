@@ -20,7 +20,7 @@ import { GetPolicyResponse } from "types";
 // });
 
 export const Table: React.FC = () => {
-  const { data } = useSWR("https://mksbai.site/api/method/getAllRows", (url) =>
+  const { data } = useSWR("/api/method/getAllRows", (url) =>
     axios.post<GetPolicyResponse>(url).then((res) => res.data)
   );
 
@@ -83,7 +83,7 @@ export const Table: React.FC = () => {
               Object.entries(data).map(
                 ([
                   id,
-                  { linkedTo, data, scan, print, prize, minus, scan_url },
+                  { linkedTo, data, scan, print, prize, minus, url_scan },
                 ]) => (
                   <tr key={id}>
                     <td className="p-5 text-text-secondary font-semibold text-[17px]">
@@ -128,9 +128,12 @@ export const Table: React.FC = () => {
                       {minus} ₽
                     </td>
                     <td>
-                      <a href={scan_url} target="_blank">
+                      <button
+                        className="cursor-pointer"
+                        onClick={() => window.open(url_scan, "_new")}
+                      >
                         <Document />
-                      </a>
+                      </button>
                     </td>
                   </tr>
                 )

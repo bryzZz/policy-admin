@@ -43,7 +43,10 @@ export const ImageInput: React.FC<ImageInputProps> = ({ onChange }) => {
             <p className="text-center font-bold text-[#919EAB] leading-4 max-w-[170px] mb-[18px]">
               Перетащите файлы в эту область
             </p>
-            <button className="px-3 py-2 text-sm font-bold bg-[#BFBFBF] rounded-lg shadow-[0px_8px_16px_0px_rgba(104,104,104,0.24)] text-white">
+            <button
+              type="button"
+              className="px-3 py-2 text-sm font-bold bg-[#BFBFBF] rounded-lg shadow-[0px_8px_16px_0px_rgba(104,104,104,0.24)] text-white"
+            >
               Выбрать файл
             </button>
           </>
