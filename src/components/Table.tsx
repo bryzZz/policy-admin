@@ -20,45 +20,10 @@ import { usePolicyModal } from "store/useModals";
 //   minimumFractionDigits: 2,
 // });
 
-const mockData = {
-  "216148": {
-    linkedTo: "PKM0972575123",
-    scan: 1,
-    price: "3000",
-    data: "",
-    minus: 1005.21,
-    print: 0,
-    url_scan:
-      "CLEANSCAN82CD9DABD878D58AA3E124E0AAB8E6DE1CEDE27839D76952C0BD6139C964719D707DA0FE20094AA8A72E5530C2D3B4D092A994FB689029900622A7370EF84C76.png",
-  },
-  "283233": {
-    linkedTo: "EXP1032082",
-    scan: 1,
-    price: "100",
-    data: "",
-    minus: 4105.9,
-    print: 1,
-    url_scan:
-      "https://mksbai.site/api/row/CLEANSCANE069F2E07F4BE11D2CC653E7AF6B97CBEF1F9AD7B77D03A52033D3F3097247FD43BBCAE4A7B5925C6BFCD7EA42E32130A3A7FBEF9C17E7FA96C9F815AFE88F60.png",
-  },
-  "346943": {
-    linkedTo: "EMP1559091",
-    scan: 1,
-    price: "100",
-    data: "",
-    minus: 4400.91,
-    print: 1,
-    url_scan:
-      "https://mksbai.site/api/row/CLEANSCANF3DFC776ACAB68191E884042D081544DC695BDE591D1F0EDBC6E4BCF7877746FDA41D01AAF1B78B5E6ED190FE9CDBDEB5B03C72EA20EFE800132748591D6ABD6.png",
-  },
-};
-
 export const Table: React.FC = () => {
   const { data } = useSWR("/api/method/getAllRows", (url) =>
     axios.post<GetPolicyResponse>(url).then((res) => res.data)
   );
-
-  console.log(data);
 
   const [isRecordModalOpen, setIsRecordModalOpen] = useState(false);
   const [isScanModalOpen, setIsScanModalOpen] = useState(false);
@@ -125,8 +90,8 @@ export const Table: React.FC = () => {
             </tr>
           </thead>
           <tbody>
-            {mockData &&
-              Object.entries(mockData).map(
+            {data &&
+              Object.entries(data).map(
                 ([
                   id,
                   { linkedTo, data, scan, print, price, minus, url_scan },
