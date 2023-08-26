@@ -45,7 +45,7 @@ export const SecondStep: React.FC<SecondStepProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-6 flex-col mb-6 px-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             {...register("vehicle_model", { required: true })}
             label="Модель авто"
@@ -55,7 +55,7 @@ export const SecondStep: React.FC<SecondStepProps> = ({
             label="Гос. номер авто"
           />
         </div>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input
             {...register("doc_type", { required: true })}
             label="Вид документа"
@@ -93,7 +93,7 @@ export const SecondStep: React.FC<SecondStepProps> = ({
           {...register("doc_data", { required: true })}
           label="Водительское удостоверение "
         />
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             {...register("start", { required: true })}
             type="date"

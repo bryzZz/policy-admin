@@ -8,19 +8,14 @@ import { FirstStep, FirstStepFormValues } from "./FirstStep";
 import { SecondStep, SecondStepFormValues } from "./SecondStep";
 import { LastStep } from "./LastStep";
 import { CreatePolicyResponse } from "types";
-
-interface PolicyModalProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import { usePolicyModal } from "store/useModals";
 
 type RequestData = FirstStepFormValues &
   Omit<SecondStepFormValues, "print"> & { print: number };
 
-export const PolicyModal: React.FC<PolicyModalProps> = ({
-  isOpen,
-  setIsOpen,
-}) => {
+export const PolicyModal: React.FC = () => {
+  const { isOpen, setIsOpen } = usePolicyModal();
+
   const { trigger, data } = useSWRMutation(
     "/api/method/policy/createFull",
     (
@@ -110,7 +105,7 @@ export const PolicyModal: React.FC<PolicyModalProps> = ({
     <Dialog.Root open={isOpen} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="bg-black bg-opacity-80 backdrop-blur-sm data-[state=open]:animate-overlayShow fixed inset-0" />
-        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] max-h-[85vh] w-[90vw] max-w-[700px] translate-x-[-50%] translate-y-[-50%] rounded-2xl bg-white shadow-[-40px_40px_80px_-8px_rgba(145,158,171,0.24)] focus:outline-none">
+        <Dialog.Content className="data-[state=open]:animate-contentShow fixed top-[50%] left-[50%] overflow-auto max-h-[85vh] w-[90vw] max-w-[700px] translate-x-[-50%] translate-y-[-50%] rounded-2xl bg-white shadow-[-40px_40px_80px_-8px_rgba(145,158,171,0.24)] focus:outline-none">
           <Dialog.Title className="text-text-primary p-6 text-lg font-bold mb-6">
             Создать полис {getStepNumber()}/2
           </Dialog.Title>

@@ -8,7 +8,7 @@ export interface GetPolicyResponse {
     data: string;
     scan: number;
     print: number;
-    prize: string;
+    price: string;
     minus: string;
     url_scan: string;
   };

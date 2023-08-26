@@ -22,6 +22,7 @@ export default defineConfig({
       utils: path.resolve(__dirname, "./src/utils"),
       sections: path.resolve(__dirname, "./src/sections"),
       data: path.resolve(__dirname, "./src/data"),
+      store: path.resolve(__dirname, "./src/store"),
     },
   },
 });

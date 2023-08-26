@@ -43,7 +43,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="flex gap-6 flex-col mb-6 px-6">
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Input
             {...register("pNumber", { required: true })}
             label="Номер полиса"
@@ -64,7 +64,7 @@ export const FirstStep: React.FC<FirstStepProps> = ({
 
         <Input {...register("fcs", { required: true })} label="ФИО" />
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Input {...register("cAddress", { required: true })} label="Адрес" />
           <Controller
             control={control}
