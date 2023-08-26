@@ -13,7 +13,7 @@ export const Statistics: React.FC = () => {
   );
 
   return (
-    <div className="base-container grid grid-cols-3 gap-7 mb-20">
+    <div className="base-container grid grid-cols-[repeat(auto-fit,minmax(330px,1fr))] gap-7 mb-20">
       {data && (
         <>
           <div className="p-7 rounded-[20px] flex items-center justify-between shadow-[0px_15px_30px_-5px_rgba(145,_158,_171,_0.12),0px_0px_2px_0px_rgba(145,_158,_171,_0.20)]">
