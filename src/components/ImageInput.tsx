@@ -21,7 +21,7 @@ export const ImageInput: React.FC<ImageInputProps> = ({ onChange }) => {
   const { getRootProps, getInputProps, isDragActive, acceptedFiles } =
     useDropzone({
       onDrop,
-      accept: { "image/*": [] },
+      accept: { "image/*": [], "application/pdf": [] },
       multiple: false,
     });
 
